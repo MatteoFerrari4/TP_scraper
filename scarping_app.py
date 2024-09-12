@@ -5,6 +5,7 @@ from aiohttp import ClientSession
 from bs4 import BeautifulSoup
 from re import search
 from traceback import print_exc
+from io import BytesIO
 
 # Variabile globale per contare le recensioni saltate
 skipped_reviews = 0
@@ -123,22 +124,27 @@ def scrape_reviews_sync(base_url, max_pages=10):
     """Esegui la funzione di scraping in modalità sincrona per Streamlit."""
     return asyncio.run(scrape_reviews(base_url, max_pages))
 
+# Utility function to export DataFrame to Excel format
+def to_excel(df):
+    output = BytesIO()
+    writer = pd.ExcelWriter(output, engine='xlsxwriter')
+    df.to_excel(writer, index=False, sheet_name='Sheet1')
+    writer.close()  # Use close() instead of save()
+    processed_data = output.getvalue()
+    return processed_data
+
 # Interfaccia Streamlit
 st.title("Trustpilot Review Scraper")
 
 # Input URL Trustpilot
-url = st.text_input("Inserisci l'URL della pagina Trustpilot")
+url = st.text_input("Inserisci l'URL della pagina Trustpilot (es. https://www.trustpilot.com/review/www.mooney.it?languages=all):")
 
 # Numero di pagine da analizzare
 num_pages = st.number_input("Numero di pagine da scaricare", min_value=1, max_value=100, value=10)
 
-# Nome del file output
-file_name = st.text_input("Nome del file Excel per salvare le recensioni", "reviews_output")
-
 # Avvia lo scraping quando l'utente clicca su "Scarica"
 if st.button("Scarica Recensioni"):
     if url:
-        output_file = f"{file_name}.xlsx"
         # Esegui lo scraping delle recensioni
         reviews = scrape_reviews_sync(url, num_pages)
 
@@ -146,9 +152,16 @@ if st.button("Scarica Recensioni"):
         if not reviews:
             st.error("Nessuna recensione trovata.")
         else:
-            # Crea un DataFrame e salva le recensioni in Excel
+            # Crea un DataFrame con le recensioni
             reviews_df = pd.DataFrame(reviews, columns=['Title', 'Body', 'Date', 'Rating', 'Reviewer'])
-            reviews_df.to_excel(output_file, index=False)
-            st.success(f"Recensioni scaricate e salvate in {output_file}")
+
+            # Prepara il file Excel per il download
+            excel_data = to_excel(reviews_df)
+
+            # Offri un link per scaricare il file con le recensioni
+            st.download_button(label="Scarica il file con le recensioni",
+                               data=excel_data,
+                               file_name='reviews_output.xlsx',
+                               mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     else:
         st.error("Inserisci un URL valido di Trustpilot")
