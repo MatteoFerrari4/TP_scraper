@@ -6,3 +6,5 @@ lxml
 nltk
 spacy
 openpyxl
+thinc==8.0.15
+numpy>=1.21.0
