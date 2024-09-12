@@ -13,3 +13,4 @@ murmurhash==1.0.10
 preshed==3.0.6
 cymem==2.0.6
 wasabi==0.10.1
+xlsxwriter
