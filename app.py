@@ -7,7 +7,6 @@ import os
 from scarping_app import scrape_reviews_sync  # Funzione di scraping sincrona
 from word_count_app import count_unique_words_in_reviews, to_excel  # Funzione di conteggio parole
 
-
 # Menu di navigazione con l'aggiunta della Home
 menu = ["Home", "Scraping Recensioni Trustpilot", "Analisi Conteggio Parole"]
 choice = st.sidebar.selectbox("Seleziona un'opzione", menu)
@@ -51,43 +50,44 @@ if choice == "Home":
     - Scraped Reviews (`mooney_reviews.xlsx`)
     - Word Count (`word_counts.xlsx`)
     """)
-    
+
 # Sezione per lo scraping delle recensioni
 elif choice == "Scraping Recensioni Trustpilot":
     st.subheader("Scraping delle Recensioni")
 
-# Input URL Trustpilot
-url = st.text_input("Inserisci l'URL della pagina Trustpilot (es. https://www.trustpilot.com/review/www.mooney.it?languages=all):")
+    # Input URL Trustpilot
+    url = st.text_input("Inserisci l'URL della pagina Trustpilot (es. https://www.trustpilot.com/review/www.mooney.it?languages=all):")
 
-# Numero di pagine da analizzare
-num_pages = st.number_input("Numero di pagine da scaricare", min_value=1, max_value=100, value=10)
+    # Numero di pagine da analizzare
+    num_pages = st.number_input("Numero di pagine da scaricare", min_value=1, max_value=100, value=10)
 
-# Avvia lo scraping quando l'utente clicca su "Scarica"
-if st.button("Scarica Recensioni"):
-    if url:
-        # Esegui lo scraping delle recensioni
-        reviews = scrape_reviews_sync(url, num_pages)
+    # Avvia lo scraping quando l'utente clicca su "Scarica"
+    if st.button("Scarica Recensioni"):
+        if url:
+            # Esegui lo scraping delle recensioni
+            reviews = scrape_reviews_sync(url, num_pages)
 
-        # Controlla se ci sono recensioni trovate
-        if not reviews:
-            st.error("Nessuna recensione trovata.")
+            # Controlla se ci sono recensioni trovate
+            if not reviews:
+                st.error("Nessuna recensione trovata.")
+            else:
+                # Crea un DataFrame con le recensioni
+                reviews_df = pd.DataFrame(reviews, columns=['Title', 'Body', 'Date', 'Rating', 'Reviewer'])
+
+                # Prepara il file Excel per il download
+                excel_data = to_excel(reviews_df)
+
+                # Offri un link per scaricare il file con le recensioni
+                st.download_button(label="Scarica il file con le recensioni",
+                                   data=excel_data,
+                                   file_name='reviews_output.xlsx',
+                                   mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
         else:
-            # Crea un DataFrame con le recensioni
-            reviews_df = pd.DataFrame(reviews, columns=['Title', 'Body', 'Date', 'Rating', 'Reviewer'])
-
-            # Prepara il file Excel per il download
-            excel_data = to_excel(reviews_df)
-
-            # Offri un link per scaricare il file con le recensioni
-            st.download_button(label="Scarica il file con le recensioni",
-                               data=excel_data,
-                               file_name='reviews_output.xlsx',
-                               mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-    else:
-        st.error("Inserisci un URL valido di Trustpilot")
+            st.error("Inserisci un URL valido di Trustpilot")
 
 # Sezione per l'analisi del conteggio parole
 elif choice == "Analisi Conteggio Parole":
+
     st.subheader("Analisi del Conteggio delle Parole")
 
     # Upload del file Excel
