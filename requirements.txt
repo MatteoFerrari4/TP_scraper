@@ -1,3 +1,4 @@
+python_version == "3.10"
 streamlit
 pandas
 aiohttp
@@ -8,3 +9,8 @@ spacy
 openpyxl
 thinc==8.0.15
 numpy==1.21.4
+blis==0.7.11
+murmurhash==1.0.10
+preshed==3.0.6
+cymem==2.0.6
+wasabi==0.10.1
