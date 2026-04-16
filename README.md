@@ -4,10 +4,10 @@
 
 ## Project Overview
 
-This project provides a streamlined solution for searching reviews from **Trustpilot** and analyzing the unique word count from those reviews. It consists of two main applications:
+This project provides a solution for searching reviews from **Trustpilot** and analyzing the unique word count from those reviews. It consists of two main applications:
 
-1. **Trustpilot Review Finder*: finds reviews from a Trustpilot company page and saves them in an Excel file.
-2. **Word Count Analyzer**: Processes the reviews, combines the title and body of each review, removes common stopwords (in English and Italian), and generates an Excel file with the unique words and their frequencies.
+1. **Trustpilot Review Finder**: finds reviews from a Trustpilot company page and saves them in an Excel file.
+2. **Word Count Analyzer**: Processes the reviews, combines the title and body of each review, removes common stopwords/emptywords (in English and Italian), and generates an Excel file with the unique words and their frequencies.
 
 Both of these applications have been bundled into a **Streamlit**-based web application for easy use.
 The use is primary for Marketing teams to analyse what Costumers are saying about a certain brend.
@@ -17,11 +17,10 @@ The use is primary for Marketing teams to analyse what Costumers are saying abou
 ## Files Included
 
 1. **app.py**: The main Streamlit application that serves as a front-end for both the scraping and word count functionalities.
-2. **scraping_app.py**: Contains the logic for scraping reviews from Trustpilot using asynchronous requests.
+2. **scraping_app.py**: Contains the logic for gathering reviews from Trustpilot using asynchronous requests.
 3. **word_count_app.py**: Processes the reviews and generates a word frequency count, removing stopwords from English and Italian.
 
 ---
-
 
 ### Prerequisites
 
@@ -71,7 +70,7 @@ This is the landing page of the application, which provides an overview of the p
 - **Trustpilot Review finder**: finde reviews from Trustpilot.
 - **Word Count Analyzer**: Analyze word frequencies from the finded reviews.
 
-### 2. **Scraping Recensioni Trustpilot (Scraping Trustpilot Reviews)**
+### 2. ** Trustpilot**
 
 #### Steps:
 1. **Input Trustpilot URL**: Provide the URL of the Trustpilot page you want to finde reviews from. Example:
@@ -79,11 +78,11 @@ This is the landing page of the application, which provides an overview of the p
    https://www.trustpilot.com/review/www.mooney.it
    ```
 
-2. **Specify Number of Pages**: Choose how many pages of reviews to finde (default is 10).
+2. **Specify Number of Pages**: Choose how many pages of reviews to find (default is 10).
 
 3. **Specify Output File Name**: Choose a name for the Excel file where the reviews will be saved (default is `reviews_output.xlsx`).
 
-4. **Start Scraping**: Click the "Scarica Recensioni" (Download Reviews) button to start the scraping process. The reviews will be saved as an Excel file.
+4. **Start**: Click the "Scarica Recensioni" (Download Reviews) button to start the process. The reviews will be saved as an Excel file.
 
 #### Output:
 The program will finde reviews and save them in an Excel file with the following columns:
@@ -113,7 +112,7 @@ The program will display the unique word count and allow you to download the res
 
 ### Scenario:
 
-1. **Scraping Reviews**:
+1. **Reviews**:
    - You enter the URL of a Trustpilot page (e.g., `https://www.trustpilot.com/review/www.mooney.it`), choose to finde 5 pages of reviews, and save the output as `mooney_reviews.xlsx`.
 
 2. **Counting Unique Words**:
